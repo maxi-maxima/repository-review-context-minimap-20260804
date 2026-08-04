@@ -1,0 +1,5 @@
+src/auth/session.py
+docs/readme.md
+migrations/20260804_add_users.sql
+frontend/components/Button.tsx
+config/production.yaml
