@@ -1,6 +1,19 @@
 #!/usr/bin/env python
 import argparse, pathlib, re, json
 RISK=[('migration',3),('auth',3),('payment',3),('security',3),('config',2),('test',-1),('docs',-1)]
+def read_lines(path):
+ for encoding in ('utf-8-sig','utf-16'):
+  try:
+   return [l.strip() for l in open(path,encoding=encoding) if l.strip()]
+  except UnicodeError:
+   pass
+ raise UnicodeError(f'could not decode {path} as UTF-8 or UTF-16')
+def paths_from_diff(lines):
+ paths=[]
+ for line in lines:
+  if line.startswith('+++ b/'):
+   paths.append(line[6:].strip())
+ return paths
 def analyze(paths):
  out=[]
  for p in paths:
@@ -14,8 +27,9 @@ def analyze(paths):
  return sorted(out,key=lambda x:(-x['risk_score'],x['file']))
 def main():
  p=argparse.ArgumentParser(description='Build a compact review minimap from changed file paths.')
- p.add_argument('paths_file'); p.add_argument('--json', action='store_true')
- a=p.parse_args(); paths=[l.strip() for l in open(a.paths_file,encoding='utf-8') if l.strip() and not l.startswith('#')]
+ p.add_argument('paths_file'); p.add_argument('--json', action='store_true'); p.add_argument('--diff', action='store_true', help='Read changed files from a unified diff file.')
+ a=p.parse_args(); lines=read_lines(a.paths_file)
+ paths=paths_from_diff(lines) if a.diff else [l for l in lines if not l.startswith('#')]
  rows=analyze(paths)
  if a.json: print(json.dumps({'files':rows,'total':len(rows),'hotspots':rows[:5]},indent=2))
  else:

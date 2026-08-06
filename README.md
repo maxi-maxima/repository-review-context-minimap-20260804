@@ -13,6 +13,8 @@ No third-party dependencies are required. Use Python 3.10+.
 ```bash
 python src/repository_review_context_minimap.py --help
 python src/repository_review_context_minimap.py examples/changed-files.txt
+git diff --name-only main...HEAD > changed-files.txt
+git diff main...HEAD > changes.diff && python src/repository_review_context_minimap.py changes.diff --diff
 python tests/test_cli.py
 ```
 
@@ -26,7 +28,6 @@ python src/repository_review_context_minimap.py examples/changed-files.txt
 
 ## Roadmap
 
-- Parse git diff directly
 - CODEOWNERS integration
 - Token budget estimates per area
 
