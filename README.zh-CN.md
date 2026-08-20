@@ -15,6 +15,7 @@ Local-first code intelligence and context reduction are trending because coding 
 ```bash
 python src/repository_review_context_minimap.py --help
 python src/repository_review_context_minimap.py examples/changed-files.txt
+python src/repository_review_context_minimap.py examples/changed-files.txt --codeowners examples/CODEOWNERS --json
 python tests/test_cli.py
 ```
 
@@ -28,8 +29,6 @@ python src/repository_review_context_minimap.py examples/changed-files.txt
 
 ## 路线图
 
-- Parse git diff directly
-- CODEOWNERS integration
 - Token budget estimates per area
 
 ## 许可证
